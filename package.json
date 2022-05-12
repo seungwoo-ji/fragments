@@ -11,5 +11,8 @@
     "url": "git+https://github.com/seungwoo-ji/fragments.git"
   },
   "author": "Seung Woo (Paul) Ji",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "2.6.2"
+  }
 }
