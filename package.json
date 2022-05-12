@@ -1,0 +1,15 @@
+{
+  "name": "fragments",
+  "private": true,
+  "version": "0.0.1",
+  "description": "a cloud-based microservice for fragments of text and images",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seungwoo-ji/fragments.git"
+  },
+  "author": "Seung Woo (Paul) Ji",
+  "license": "UNLICENSED"
+}
