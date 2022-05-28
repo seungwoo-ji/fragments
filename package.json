@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "description": "a cloud-based microservice for fragments of text and images",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:watch": "jest -c jest.config.js --runInBand --watch --",
+    "test": "jest -c jest.config.js --runInBand --",
+    "coverage": "jest -c jest.config.js --runInBand --coverage",
     "lint": "eslint --config .eslintrc.js src/**",
     "start": "node src/index.js",
     "dev": "LOG_LEVEL=debug nodemon ./src/index.js --watch src",
@@ -18,6 +20,7 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "eslint": "^8.15.0",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16",
     "prettier": "2.6.2"
   },
