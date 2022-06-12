@@ -126,7 +126,7 @@ class Fragment {
       throw new Error(`fragment data must be a Buffer object, got data=${data}`);
 
     this.updated = new Date().toISOString();
-    this.size++;
+    this.size = data.length;
     await writeFragment(this);
 
     return await writeFragmentData(this.ownerId, this.id, data);
