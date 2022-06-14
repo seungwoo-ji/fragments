@@ -1,6 +1,7 @@
 const request = require('supertest');
 
 const app = require('../../src/app');
+const hash = require('../../src/hash');
 
 describe('POST /v1/fragments', () => {
   test('unauthenticated requests are denied', async () => {
@@ -66,7 +67,7 @@ describe('POST /v1/fragments', () => {
       .set('content-type', 'text/plain')
       .send('hello');
 
-    expect(res.body.fragment).toHaveProperty('ownerId', 'user1@email.com');
+    expect(res.body.fragment).toHaveProperty('ownerId', hash('user1@email.com'));
     expect(res.body.fragment).toHaveProperty('type', 'text/plain');
     expect(res.body.fragment).toHaveProperty('size', 5);
   });
