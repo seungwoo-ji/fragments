@@ -1,7 +1,6 @@
 const request = require('supertest');
 
 const app = require('../../src/app');
-const logger = require('../../src/logger');
 
 describe('GET /v1/fragments/:id', () => {
   test('unauthenticated requests are denied', async () => {
