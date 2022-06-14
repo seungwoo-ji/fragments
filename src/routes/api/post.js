@@ -5,7 +5,7 @@ const { createSuccessResponse, createErrorResponse } = require('../../response')
 /**
  * Create a new fragment for the current authenticated user
  */
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const data = req.body;
 
   if (!Buffer.isBuffer(data)) {
@@ -15,12 +15,14 @@ module.exports = (req, res) => {
     return;
   }
 
+  const fragment = new Fragment({ ownerId: req.user, type: req.get('content-type') });
+
   try {
-    const fragment = new Fragment({ ownerId: req.user, type: req.get('content-type') });
-    fragment.setData(data);
+    await fragment.setData(data);
+    await fragment.getData();
     logger.debug({ fragment }, 'new fragment is created');
 
-    res.set('location', `${process.env.API_URL}/v1/${fragment.id}`);
+    res.set('location', `${process.env.API_URL}/v1/fragments/${fragment.id}`);
     res.status(201).json(createSuccessResponse({ fragment }));
   } catch (error) {
     logger.error(error.message);

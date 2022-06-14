@@ -33,7 +33,7 @@ describe('POST /v1/fragments', () => {
     expect(res.body.status).toBe('error');
   });
 
-  test('authenticated user can create a plain test fragment', async () => {
+  test('authenticated user can create a plain text fragment', async () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
@@ -78,6 +78,6 @@ describe('POST /v1/fragments', () => {
       .set('content-type', 'text/plain')
       .send('hello');
 
-    expect(res.header.location).toBe(`${process.env.API_URL}/v1/${res.body.fragment.id}`);
+    expect(res.header.location).toBe(`${process.env.API_URL}/v1/fragments/${res.body.fragment.id}`);
   });
 });
