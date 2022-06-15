@@ -56,7 +56,18 @@ describe('GET /v1/fragments/:id', () => {
     expect(getRes.body.status).toBe('error');
   });
 
-  test('authenticated user can get a plain text fragment', async () => {
+  test('invalid fragment id is denied ', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const getRes = await request(app)
+      .get('/v1/fragments/invalid-id')
+      .auth(...user);
+
+    expect(getRes.statusCode).toBe(404);
+    expect(getRes.body.status).toBe('error');
+  });
+
+  test('authenticated user can get a plain text fragment with extension', async () => {
     const user = ['user1@email.com', 'password1'];
 
     const postRes = await request(app)
@@ -67,6 +78,22 @@ describe('GET /v1/fragments/:id', () => {
 
     const getRes = await request(app)
       .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
+      .auth(...user);
+
+    expect(getRes.text).toBe('hello');
+  });
+
+  test('authenticated user can get a plain text fragment without extension', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/plain')
+      .send('hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}`)
       .auth(...user);
 
     expect(getRes.text).toBe('hello');
