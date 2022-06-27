@@ -1,9 +1,23 @@
 # Build fragment microservice api and serve it via express js 
 
-FROM node:16.15.1
+# Stage 1: install the base dependencies
+FROM node:16.15.1-alpine@sha256:c785e617c8d7015190c0d41af52cc69be8a16e3d9eb7cb21f0bb58bcfca14d6b AS dependencies
 
 LABEL maintainer="Seung Woo Ji <swji1@myseneca.ca>" \
       description="Fragments node.js microservice"
+
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci --production
+
+###############################################################################
+
+# Stage 2: run the fragments microservice server
+FROM node:16.15.1-alpine@sha256:c785e617c8d7015190c0d41af52cc69be8a16e3d9eb7cb21f0bb58bcfca14d6b AS production
 
 # Default service port
 ENV PORT=8080 \
@@ -14,9 +28,10 @@ ENV PORT=8080 \
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy the generated node dependencies
+COPY --from=dependencies /app/node_modules /app/node_modules
 
-RUN npm install
+COPY package*.json ./
 
 COPY ./src ./src
 
