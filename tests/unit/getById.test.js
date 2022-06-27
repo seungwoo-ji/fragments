@@ -113,6 +113,21 @@ describe('GET /v1/fragments/:id', () => {
       .auth(...user);
 
     expect(getRes.header).toHaveProperty('content-length', '5');
+  });
+
+  test('returns with the expected Content-Type header', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/plain')
+      .send('hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
+      .auth(...user);
+
     expect(getRes.header).toHaveProperty('content-type', 'text/plain; charset=utf-8');
   });
 });
