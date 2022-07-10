@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --production
+RUN npm ci --only=production
 
 ###############################################################################
 
@@ -20,23 +20,20 @@ RUN npm ci --production
 FROM node:16.15.1-alpine@sha256:c785e617c8d7015190c0d41af52cc69be8a16e3d9eb7cb21f0bb58bcfca14d6b AS production
 
 # Default service port
-ENV PORT=8080 \
-# Reduce npm spam (https://docs.npmjs.com/cli/v8/using-npm/config#loglevel)
-    NPM_CONFIG_LOGLEVEL=warn \
-# Disable color when run (https://docs.npmjs.com/cli/v8/using-npm/config#color)
-    NPM_CONFIG_COLOR=false
+ENV PORT=8080
 
 WORKDIR /app
 
 # Copy the generated node dependencies
-COPY --from=dependencies /app/node_modules /app/node_modules
+COPY --chown=node:node --from=dependencies /app/node_modules /app/node_modules
 
-COPY package*.json ./
+COPY --chown=node:node . .
 
-COPY ./src ./src
+USER node
 
-COPY ./tests/.htpasswd ./tests/.htpasswd
-
-CMD npm start
+CMD node src/index.js
 
 EXPOSE 8080
+
+HEALTHCHECK --interval=15s --timeout=30s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080 || exit 1
