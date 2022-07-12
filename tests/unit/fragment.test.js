@@ -5,12 +5,12 @@ const wait = async (ms = 10) => new Promise((resolve) => setTimeout(resolve, ms)
 
 const validTypes = [
   `text/plain`,
-  /*
-   Currently, only text/plain is supported. Others will be added later.
-
   `text/markdown`,
   `text/html`,
   `application/json`,
+  /*
+   Currently, only text/plain is supported. Others will be added later.
+
   `image/png`,
   `image/jpeg`,
   `image/webp`,
@@ -95,7 +95,7 @@ describe('Fragment class', () => {
       expect(fragment.id).toEqual('id');
     });
 
-    test('fragments get a created datetime string', () => {
+    test('fragments get a created date/time string', () => {
       const fragment = new Fragment({
         ownerId: '1234',
         type: 'text/plain',
@@ -104,7 +104,7 @@ describe('Fragment class', () => {
       expect(Date.parse(fragment.created)).not.toBeNaN();
     });
 
-    test('fragments get an updated datetime string', () => {
+    test('fragments get an updated date/time string', () => {
       const fragment = new Fragment({
         ownerId: '1234',
         type: 'text/plain',

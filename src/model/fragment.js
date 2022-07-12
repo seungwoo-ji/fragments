@@ -82,7 +82,7 @@ class Fragment {
     const fragment = await readFragment(ownerId, id);
     if (!fragment)
       throw new Error(
-        `fragment does not exist for the ownderId=${ownerId} id=${id}, got fragment=${fragment}`
+        `fragment does not exist for the ownerId=${ownerId} id=${id}, got fragment=${fragment}`
       );
 
     return fragment;
