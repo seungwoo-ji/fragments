@@ -45,6 +45,39 @@ describe('POST /v1/fragments', () => {
     expect(res.body.status).toBe('ok');
   });
 
+  test('authenticated user can create a markdown text fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'text/markdown')
+      .send('#Hello');
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('authenticated user can create a html text fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'text/html')
+      .send('<h1>Hello</h1>');
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('authenticated user can create a json fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'application/json')
+      .send({ content: 'hello' });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
   test('response includes necessary properties', async () => {
     const res = await request(app)
       .post('/v1/fragments')
