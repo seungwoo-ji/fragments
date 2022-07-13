@@ -4,22 +4,29 @@ const app = require('../../src/app');
 
 describe('GET /v1/fragments/:id', () => {
   test('unauthenticated requests are denied', async () => {
-    const res = await request(app)
+    const postRes = await request(app)
       .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
       .set('content-type', 'text/plain')
       .send('hello');
 
-    expect(res.statusCode).toBe(401);
+    const getRes = await request(app).get(`/v1/fragments/${postRes.body.fragment.id}`);
+
+    expect(getRes.statusCode).toBe(401);
   });
 
   test('incorrect credentials are denied', async () => {
-    const res = await request(app)
+    const postRes = await request(app)
       .post('/v1/fragments')
-      .auth('invalid@email.com', 'incorrect_password')
+      .auth('user1@email.com', 'password1')
       .set('content-type', 'text/plain')
       .send('hello');
 
-    expect(res.statusCode).toBe(401);
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}`)
+      .auth('invalid@email.com', 'incorrect_password');
+
+    expect(getRes.statusCode).toBe(401);
   });
 
   test('unknown type conversion is denied ', async () => {
@@ -67,7 +74,7 @@ describe('GET /v1/fragments/:id', () => {
     expect(getRes.body.status).toBe('error');
   });
 
-  test('authenticated user can get a plain text fragment with extension', async () => {
+  test('returns with the expected Content-Type header', async () => {
     const user = ['user1@email.com', 'password1'];
 
     const postRes = await request(app)
@@ -80,7 +87,7 @@ describe('GET /v1/fragments/:id', () => {
       .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
       .auth(...user);
 
-    expect(getRes.text).toBe('hello');
+    expect(getRes.header).toHaveProperty('content-type', 'text/plain; charset=utf-8');
   });
 
   test('authenticated user can get a plain text fragment without extension', async () => {
@@ -97,25 +104,10 @@ describe('GET /v1/fragments/:id', () => {
       .auth(...user);
 
     expect(getRes.text).toBe('hello');
-  });
-
-  test('authenticated user can get a plain text fragment', async () => {
-    const user = ['user1@email.com', 'password1'];
-
-    const postRes = await request(app)
-      .post('/v1/fragments')
-      .auth(...user)
-      .set('content-type', 'text/plain')
-      .send('hello');
-
-    const getRes = await request(app)
-      .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
-      .auth(...user);
-
     expect(getRes.header).toHaveProperty('content-length', '5');
   });
 
-  test('returns with the expected Content-Type header', async () => {
+  test('authenticated user can convert a plain text fragment into text', async () => {
     const user = ['user1@email.com', 'password1'];
 
     const postRes = await request(app)
@@ -128,6 +120,71 @@ describe('GET /v1/fragments/:id', () => {
       .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
       .auth(...user);
 
-    expect(getRes.header).toHaveProperty('content-type', 'text/plain; charset=utf-8');
+    expect(getRes.text).toBe('hello');
+    expect(getRes.header).toHaveProperty('content-length', '5');
+  });
+
+  test('authenticated user can get a markdown fragment without extension', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/markdown')
+      .send('# Hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}`)
+      .auth(...user);
+
+    expect(getRes.text).toBe('# Hello');
+  });
+
+  test('authenticated user can convert a markdown fragment into markdown', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/markdown')
+      .send('# Hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}.md`)
+      .auth(...user);
+
+    expect(getRes.header).toHaveProperty('content-length', '7');
+  });
+
+  test('authenticated user can convert a markdown fragment into html', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/markdown')
+      .send('# Hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}.html`)
+      .auth(...user);
+
+    expect(getRes.text).toBe('<h1>Hello</h1>\n');
+  });
+
+  test('authenticated user can convert a markdown fragment into text', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postRes = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/markdown')
+      .send('# Hello');
+
+    const getRes = await request(app)
+      .get(`/v1/fragments/${postRes.body.fragment.id}.txt`)
+      .auth(...user);
+
+    expect(getRes.text).toBe('# Hello');
   });
 });

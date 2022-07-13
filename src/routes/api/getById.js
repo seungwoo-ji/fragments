@@ -1,5 +1,6 @@
 const path = require('path');
 const mime = require('mime-types');
+const md = require('markdown-it')();
 
 const logger = require('../../logger');
 const { Fragment } = require('../../model/fragment');
@@ -10,10 +11,11 @@ const { createErrorResponse } = require('../../response');
  */
 module.exports = async (req, res) => {
   const { name, ext } = path.parse(req.params.id);
+  const type = mime.lookup(ext) || '';
 
   try {
     const fragment = await Fragment.byId(req.user, name);
-    const data = await fragment.getData();
+    let data = await fragment.getData();
     logger.debug({ data }, `fragment data is found for user=${req.user} fragment id=${name}`);
 
     if (!ext) {
@@ -23,8 +25,16 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (fragment.formats.includes(mime.lookup(ext))) {
-      res.set('content-type', fragment.type);
+    if (fragment.formats.includes(type)) {
+      if (fragment.mimeType === 'text/markdown' && type === 'text/html') {
+        data = md.render(data.toString());
+        logger.debug(
+          { data },
+          `fragment of type=${fragment.mimeType} is converted to type=${type} successfully`
+        );
+      }
+
+      res.set('content-type', type);
       res.status(200).send(data);
     } else {
       logger.error(
@@ -43,8 +53,6 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     logger.error(error.message);
-    res
-      .status(404)
-      .json(createErrorResponse(404, `fragment id: ${name} does not represent a known fragment`));
+    res.status(404).json(createErrorResponse(404, error.message));
   }
 };
