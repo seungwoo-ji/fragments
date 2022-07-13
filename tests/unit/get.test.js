@@ -20,5 +20,46 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
-  // TODO: we'll need to add tests to check the contents of the fragments array later
+  test('authenticated user with no fragments get a empty fragments array', async () => {
+    const res = await request(app).get('/v1/fragments').auth('user1@email.com', 'password1');
+    expect(res.body.fragments).toEqual([]);
+  });
+
+  test('authenticated user gets a fragments array of ids', async () => {
+    const user = ['user1@email.com', 'password1'];
+
+    const postOne = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/plain')
+      .send('hello');
+
+    const postTwo = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/plain')
+      .send('world');
+
+    const res = await request(app)
+      .get('/v1/fragments')
+      .auth(...user);
+
+    expect(res.body.fragments).toEqual([postOne.body.fragment.id, postTwo.body.fragment.id]);
+  });
+
+  test("authenticated user gets a fragments array with fragments' metadata", async () => {
+    const user = ['user2@email.com', 'password2'];
+
+    const postOne = await request(app)
+      .post('/v1/fragments')
+      .auth(...user)
+      .set('content-type', 'text/plain')
+      .send('hello');
+
+    const res = await request(app)
+      .get('/v1/fragments?expand=1')
+      .auth(...user);
+
+    expect(res.body.fragments).toEqual([postOne.body.fragment]);
+  });
 });
