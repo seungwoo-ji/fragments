@@ -8,7 +8,7 @@
     "test": "jest -c jest.config.js --runInBand --",
     "test:integration": "hurl --test --glob \"tests/integration/**/*.hurl\"",
     "coverage": "jest -c jest.config.js --runInBand --coverage",
-    "lint": "eslint --config .eslintrc.js src/** tests/**",
+    "lint": "eslint --config .eslintrc.js src/**/*.js tests/**/*.js",
     "start": "node src/index.js",
     "dev": "LOG_LEVEL=debug nodemon ./src/index.js --watch src",
     "dev-basicAuth": "NODE_ENV=test LOG_LEVEL=debug nodemon ./src/index.js --watch src",
