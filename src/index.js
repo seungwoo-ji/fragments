@@ -1,7 +1,9 @@
 // src/index.js
+const path = require('path');
+const envFile = path.join(__dirname, '..', process.env.NODE_ENV === 'test' ? 'env.jest' : '.env');
 
 // Read environment variables from an .env file (if present)
-require('dotenv').config();
+require('dotenv').config({ path: envFile });
 
 // We want to log any crash cases so we can debug later from logs.
 const logger = require('./logger');
