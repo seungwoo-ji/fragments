@@ -19,6 +19,7 @@
   "author": "Seung Woo (Paul) Ji",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@orangeopensource/hurl": "^1.6.5",
     "eslint": "^8.15.0",
     "jest": "^28.1.0",
     "nodemon": "^2.0.16",
