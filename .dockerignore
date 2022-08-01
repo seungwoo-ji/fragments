@@ -11,3 +11,5 @@ tests/
 .prettier*
 jest*
 *.tgz
+scripts/
+docker-compose*
