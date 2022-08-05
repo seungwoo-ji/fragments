@@ -19,7 +19,6 @@ jsonpath "$.fragment.id" matches "^[A-Za-z0-9_-]+$"
 # Our ownerId hash is a hex encoded string
 jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 # Basic check for the presence of created and updated date strings.
-# You could also write a regex for this and use matches
 jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "text/plain; charset=utf-8"

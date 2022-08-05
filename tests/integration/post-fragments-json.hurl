@@ -4,7 +4,6 @@ POST http://localhost:8080/v1/fragments
 Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 # We're sending a plain text fragment
 Content-Type: application/json
-# Body of the request goes in ```...``` when it's a string
 {
   "data": "Hello"
 }
@@ -21,7 +20,6 @@ jsonpath "$.fragment.id" matches "^[A-Za-z0-9_-]+$"
 # Our ownerId hash is a hex encoded string
 jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 # Basic check for the presence of created and updated date strings.
-# You could also write a regex for this and use matches
 jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "application/json"
