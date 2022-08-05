@@ -19,7 +19,6 @@ module.exports = async (req, res) => {
 
   try {
     await fragment.setData(data);
-    await fragment.getData();
     logger.debug({ fragment }, 'new fragment is created');
 
     res.set('location', `${process.env.API_URL}/v1/fragments/${fragment.id}`);
