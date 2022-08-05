@@ -82,18 +82,18 @@ fragment2_type: jsonpath "$.fragment.type"
 fragment2_size: jsonpath "$.fragment.size"
 
 # 6. Try to GET the second fragment info we just posted by its URL/info
-GET {{fragment1_url}}/info
+GET {{fragment2_url}}/info
 Authorization: Basic dXNlcjFAZW1haWwuY29tOnBhc3N3b3JkMQ==
 
 HTTP/1.1 200
 Content-Type: application/json; charset=utf-8
 [Asserts]
-jsonpath "$.fragment.id" == {{fragment1_id}}
-jsonpath "$.fragment.ownerId" == {{fragment1_ownerId}}
-jsonpath "$.fragment.created" == {{fragment1_created}}
-jsonpath "$.fragment.updated" == {{fragment1_updated}}
-jsonpath "$.fragment.type" == {{fragment1_type}}
-jsonpath "$.fragment.size" == {{fragment1_size}}
+jsonpath "$.fragment.id" == {{fragment2_id}}
+jsonpath "$.fragment.ownerId" == {{fragment2_ownerId}}
+jsonpath "$.fragment.created" == {{fragment2_created}}
+jsonpath "$.fragment.updated" == {{fragment2_updated}}
+jsonpath "$.fragment.type" == {{fragment2_type}}
+jsonpath "$.fragment.size" == {{fragment2_size}}
 
 # 7. Try to GET all of the fragments for the same authorized user without expanding them
 GET http://localhost:8080/v1/fragments
