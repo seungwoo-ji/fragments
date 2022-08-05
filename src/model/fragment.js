@@ -85,7 +85,7 @@ class Fragment {
         `fragment does not exist for the ownerId=${ownerId} id=${id}, got fragment=${fragment}`
       );
 
-    return fragment;
+    return new Fragment(fragment);
   }
 
   /**
