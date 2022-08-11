@@ -78,6 +78,50 @@ describe('POST /v1/fragments', () => {
     expect(res.body.status).toBe('ok');
   });
 
+  test('authenticated user can create a png fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'image/png')
+      .send(Buffer.from('Image'));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('authenticated user can create a jpeg fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'image/jpeg')
+      .send(Buffer.from('Image'));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('authenticated user can create a webp fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'image/webp')
+      .send(Buffer.from('Image'));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('authenticated user can create a gif fragment', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('content-type', 'image/gif')
+      .send(Buffer.from('Image'));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+  });
+
   test('response includes necessary properties', async () => {
     const res = await request(app)
       .post('/v1/fragments')
