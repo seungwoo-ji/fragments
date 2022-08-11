@@ -1,4 +1,3 @@
-
 # 1. POST a new JSON fragment as an authorized user
 POST http://localhost:8080/v1/fragments
 # user1@email.com:password1
@@ -24,7 +23,6 @@ jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "application/json"
 # 27 is the length of our fragment data
 jsonpath "$.fragment.size" == 27 
-# Capture the Location URL into a variable named `url`
 [Captures]
 fragment1_url: header "Location"
 fragment1_id: jsonpath "$.fragment.id"
@@ -71,7 +69,6 @@ jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "text/markdown"
 # 22 is the length of our fragment data
 jsonpath "$.fragment.size" == 22 
-# Capture the Location URL into a variable named `url`
 [Captures]
 fragment2_url: header "Location"
 fragment2_id: jsonpath "$.fragment.id"
