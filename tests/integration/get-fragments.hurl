@@ -73,19 +73,3 @@ jsonpath "$.fragments" count == 2
 jsonpath "$.fragments" includes {{fragment1_id}}
 jsonpath "$.fragments" includes {{fragment2_id}}
 
-# 6. Clean up the fragments for another test
-DELETE {{fragment1_url}}
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
-
-HTTP/1.1 200
-Content-Type: application/json; charset=utf-8
-[Asserts]
-jsonpath "$.status" == "ok"
-
-DELETE {{fragment2_url}}
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
-
-HTTP/1.1 200
-Content-Type: application/json; charset=utf-8
-[Asserts]
-jsonpath "$.status" == "ok"

@@ -1,6 +1,6 @@
 # 1. POST a new JSON fragment as an authorized user
 POST http://localhost:8080/v1/fragments
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
+Authorization: Basic dXNlcjNAZW1haWwuY29tOnBhc3N3b3JkMw==
 Content-Type: text/plain
 ```This is a fragment!```
 
@@ -27,7 +27,7 @@ fragment1: jsonpath "$.fragment"
 # 2. POST another JSON fragment as an authorized user
 POST http://localhost:8080/v1/fragments
 # user1@email.com:password1
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
+Authorization: Basic dXNlcjNAZW1haWwuY29tOnBhc3N3b3JkMw==
 Content-Type: text/plain
 ```This is another fragment!```
 
@@ -53,7 +53,7 @@ fragment2: jsonpath "$.fragment"
 
 # 3. Try to GET the user's fragments with expand 
 GET http://localhost:8080/v1/fragments?expand=1
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
+Authorization: Basic dXNlcjNAZW1haWwuY29tOnBhc3N3b3JkMw==
 
 HTTP/1.1 200
 Content-Type: application/json; charset=utf-8
@@ -73,19 +73,3 @@ jsonpath "$.fragments[1].type" == {{fragment2_type}}
 jsonpath "$.fragments[1].size" == {{fragment2_size}}
 
 
-# 4. Clean up the fragments for another test
-DELETE {{fragment1_url}}
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
-
-HTTP/1.1 200
-Content-Type: application/json; charset=utf-8
-[Asserts]
-jsonpath "$.status" == "ok"
-
-DELETE {{fragment2_url}}
-Authorization: Basic dXNlcjJAZW1haWwuY29tOnBhc3N3b3JkMg==
-
-HTTP/1.1 200
-Content-Type: application/json; charset=utf-8
-[Asserts]
-jsonpath "$.status" == "ok"
